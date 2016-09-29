@@ -57,11 +57,11 @@ public class Forecast {
     @Override
     public String toString() {
         return "Forecast{" +
-                "location=" + location +
-                ", currentDay=" + currentDay +
-                ", atmosphere=" + atmosphere +
-                ", wind=" + wind +
-                ", ExtendedForecast=" + ExtendedForecast +
+                "\nlocation=" + location +
+                ",\n currentDay=" + currentDay +
+                ",\n atmosphere=" + atmosphere +
+                ",\n wind=" + wind +
+                ",\n ExtendedForecast=" + ExtendedForecast +
                 '}';
     }
 }

@@ -18,7 +18,7 @@ public class DataBaseConnection {
     public static synchronized DataBaseConnection getInstance() {
         if (dataBaseConnection == null) {
             dataBaseConnection = new DataBaseConnection();
-            String url = "jdbc:mysql://localhost:3306/weather_bootcamp";
+            String url = "jdbc:mysql://localhost:3306/bootcamp_weather?useSSL=false";
             try {
                 dataBaseConnection.connection = DriverManager.getConnection(url, "root", "mhbk18");
             } catch (SQLException e) {

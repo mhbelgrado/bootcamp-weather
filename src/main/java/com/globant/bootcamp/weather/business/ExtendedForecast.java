@@ -1,24 +1,24 @@
 package com.globant.bootcamp.weather.business;
 
+import java.sql.Date;
 import java.time.DayOfWeek;
-import java.time.ZonedDateTime;
 
 /**
  * Created by maxib on 26/09/2016.
  */
 public class ExtendedForecast {
 
-    private ZonedDateTime date;
+    private Date date;
     private DayOfWeek day;
-    private Integer maximunTemp;
-    private Integer minimunTemp;
-    private String descripcion;
+    private Integer maximumTemp;
+    private Integer minimumTemp;
+    private String description;
 
-    public ZonedDateTime getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(ZonedDateTime date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
@@ -30,28 +30,28 @@ public class ExtendedForecast {
         this.day = day;
     }
 
-    public Integer getMaximunTemp() {
-        return maximunTemp;
+    public Integer getMaximumTemp() {
+        return maximumTemp;
     }
 
-    public void setMaximunTemp(Integer maximunTemp) {
-        this.maximunTemp = maximunTemp;
+    public void setMaximumTemp(Integer maximumTemp) {
+        this.maximumTemp = maximumTemp;
     }
 
-    public Integer getMinimunTemp() {
-        return minimunTemp;
+    public Integer getMinimumTemp() {
+        return minimumTemp;
     }
 
-    public void setMinimunTemp(Integer minimunTemp) {
-        this.minimunTemp = minimunTemp;
+    public void setMinimumTemp(Integer minimumTemp) {
+        this.minimumTemp = minimumTemp;
     }
 
-    public String getDescripcion() {
-        return descripcion;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override
@@ -59,9 +59,9 @@ public class ExtendedForecast {
         return "ExtendedForecast{" +
                 "date=" + date +
                 ", day=" + day +
-                ", maximunTemp=" + maximunTemp +
-                ", minimunTemp=" + minimunTemp +
-                ", descripcion='" + descripcion + '\'' +
+                ", maximumTemp=" + maximumTemp +
+                ", minimumTemp=" + minimumTemp +
+                ", description='" + description + '\'' +
                 '}';
     }
 }

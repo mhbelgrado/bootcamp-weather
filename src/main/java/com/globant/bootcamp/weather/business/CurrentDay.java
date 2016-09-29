@@ -1,20 +1,21 @@
 package com.globant.bootcamp.weather.business;
 
-import java.time.ZonedDateTime;
+import java.sql.Date;
 
 /**
  * Created by maxib on 25/09/2016.
  */
 public class CurrentDay {
-    private ZonedDateTime date;
+
+    private Date date;
     private Double temperature;
     private String description;
 
-    public ZonedDateTime getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(ZonedDateTime date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
@@ -33,6 +34,7 @@ public class CurrentDay {
     public void setDescription(String description) {
         this.description = description;
     }
+
 
     @Override
     public String toString() {

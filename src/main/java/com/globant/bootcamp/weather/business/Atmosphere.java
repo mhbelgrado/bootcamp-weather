@@ -5,16 +5,16 @@ package com.globant.bootcamp.weather.business;
  */
 public class Atmosphere {
 
-    private int humidity;
+    private Integer humidity;
     private Double pressure;
     private Double visibility;
     private Double rising;
 
-    public int getHumidity() {
+    public Integer getHumidity() {
         return humidity;
     }
 
-    public void setHumidity(int humidity) {
+    public void setHumidity(Integer humidity) {
         this.humidity = humidity;
     }
 
