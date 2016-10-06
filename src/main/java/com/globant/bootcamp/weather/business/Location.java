@@ -5,6 +5,7 @@ package com.globant.bootcamp.weather.business;
  */
 public class Location {
 
+    private int locationId;
     private String city;
     private String country;
     private String region;
@@ -31,6 +32,14 @@ public class Location {
 
     public void setRegion(String region) {
         this.region = region;
+    }
+
+    public int getLocationId() {
+        return locationId;
+    }
+
+    public void setLocationId(int locationId) {
+        this.locationId = locationId;
     }
 
     @Override

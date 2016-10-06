@@ -62,7 +62,9 @@ public class ExtendedForecast {
                 ", maximumTemp=" + maximumTemp +
                 ", minimumTemp=" + minimumTemp +
                 ", description='" + description + '\'' +
-                '}';
+                '}' + "\n" ;
     }
+
+
 }
 

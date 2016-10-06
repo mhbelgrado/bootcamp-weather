@@ -8,10 +8,20 @@ import java.util.List;
  */
 public class Forecast {
 
+    private Integer id;
     private Location location;
     private CurrentDay currentDay;
     private Atmosphere atmosphere;
     private Wind wind;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     private List<ExtendedForecast> ExtendedForecast = new LinkedList<>();
 
     public Location getLocation() {

@@ -1,7 +1,7 @@
 package com.globant.bootcamp.weather.persistence.dao;
 
 import com.globant.bootcamp.weather.business.Location;
-import com.globant.bootcamp.weather.persistence.DataBaseConnection;
+import com.globant.bootcamp.weather.configuration.DataBaseConnection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -45,7 +45,7 @@ public class LocationDAO implements DAOInterface<Location> {
     }
 
     @Override
-    public boolean deleteById(int id) {
+    public boolean deleteById(String id) {
         int aux = 0;
         try (PreparedStatement stmt = connection.prepareStatement(DELETE + id)) {
             aux = stmt.executeUpdate();

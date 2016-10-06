@@ -9,7 +9,7 @@ interface DAOInterface<T> {
 
     T findById(int id);
 
-    boolean deleteById(int id);
+    boolean deleteById(String id); //throws Exception;
 
     boolean insert(T entity);
 

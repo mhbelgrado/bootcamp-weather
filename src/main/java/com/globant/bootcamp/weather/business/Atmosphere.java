@@ -5,6 +5,7 @@ package com.globant.bootcamp.weather.business;
  */
 public class Atmosphere {
 
+    private int atmosphere_id;
     private Integer humidity;
     private Double pressure;
     private Double visibility;
@@ -42,6 +43,14 @@ public class Atmosphere {
         this.rising = rising;
     }
 
+    public int getAtmosphere_id() {
+        return atmosphere_id;
+    }
+
+    public void setAtmosphere_id(int atmosphere_id) {
+        this.atmosphere_id = atmosphere_id;
+    }
+
     @Override
     public String toString() {
         return "Atmosphere{" +
@@ -51,4 +60,7 @@ public class Atmosphere {
                 ", rising=" + rising +
                 '}';
     }
+
+
+
 }

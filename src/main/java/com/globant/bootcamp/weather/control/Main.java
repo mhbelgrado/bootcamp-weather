@@ -1,5 +1,6 @@
 package com.globant.bootcamp.weather.control;
 
+import com.globant.bootcamp.weather.builder.AtmosphereBuilder;
 import com.globant.bootcamp.weather.business.*;
 import com.globant.bootcamp.weather.persistence.dao.*;
 
@@ -24,11 +25,7 @@ public class Main {
 
 
         AtmosphereDao atmosphereDao = new AtmosphereDao();
-        Atmosphere atmosphere = new Atmosphere();
-        atmosphere.setHumidity(22);
-        atmosphere.setPressure(22.2);
-        atmosphere.setVisibility(34.8);
-        atmosphere.setRising(123.3);
+
 
         WindDao windDao = new WindDao();
         Wind wind = new Wind();
@@ -41,11 +38,13 @@ public class Main {
         currentDay.setDescription("Dia soleado");
         currentDay.setDate(Date.valueOf("2015-12-31"));
 
+        AtmosphereBuilder atmosphereBuilder = AtmosphereBuilder.anAtmosphere().withHumidity(22).withRising(22.2).withVisibility(23.2).withAtmosphere_id(3).withPressure(22.7);
+
         ExtendedForecast extendedForecast = new ExtendedForecast();
         ExtendedForecastDao extendedForecastDao = new ExtendedForecastDao();
 
-        extendedForecast.setDate(Date.valueOf("2014-12-31"));
-        extendedForecast.setDescription("dialluvioso");
+        extendedForecast.setDate(Date.valueOf("2014-12-22"));
+        extendedForecast.setDescription("RAINY");
         extendedForecast.setMinimumTemp(0);
         extendedForecast.setMaximumTemp(27);
         extendedForecast.setDay(DayOfWeek.FRIDAY);
@@ -58,17 +57,21 @@ public class Main {
         // System.out.println(locationDAO.insert(location));
         //System.out.println(locationDAO.deleteById(1));
         // System.out.println(locationDAO.findAll());
+        //System.out.println(forecastDao.findById(2));
+        //System.out.println(forecastDao.deleteById("2016-09-29"));
+        //System.out.println(forecastDao.findAll());
 
-        System.out.println(forecastDao.findById(1));
 
-        //System.out.println(atmosphereDao.insert(atmosphere));
+        System.out.println(atmosphereDao.insert(atmosphereBuilder.build()));
 
         //System.out.println(windDao.insert(wind));
 
         //System.out.println(currentDayDao.insert(currentDay));
 
-        // System.out.println(extendedForecastDao.insert(extendedForecast));
+        //System.out.println(extendedForecastDao.insert(extendedForecast));
         //System.out.println(extendedForecastDao.findAll());
+
+        //System.out.println(extendedForecastDao.findById(2));
 
 
     }

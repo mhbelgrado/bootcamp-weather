@@ -4,6 +4,8 @@ package com.globant.bootcamp.weather.business;
  * Created by maxib on 25/09/2016.
  */
 public class Wind {
+
+    private int windId;
     private Double speed;
     private String direction;
 
@@ -21,6 +23,14 @@ public class Wind {
 
     public void setDirection(String direction) {
         this.direction = direction;
+    }
+
+    public int getWindId() {
+        return windId;
+    }
+
+    public void setWindId(int windId) {
+        this.windId = windId;
     }
 
     @Override

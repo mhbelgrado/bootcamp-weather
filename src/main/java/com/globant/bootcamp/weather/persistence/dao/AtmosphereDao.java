@@ -1,7 +1,7 @@
 package com.globant.bootcamp.weather.persistence.dao;
 
 import com.globant.bootcamp.weather.business.Atmosphere;
-import com.globant.bootcamp.weather.persistence.DataBaseConnection;
+import com.globant.bootcamp.weather.configuration.DataBaseConnection;
 
 import java.sql.*;
 import java.util.LinkedList;
@@ -30,11 +30,7 @@ public class AtmosphereDao implements DAOInterface<Atmosphere> {
              ResultSet rs = stmt.executeQuery(SELECT_BY_ID + id)) {
 
             if (rs.next()) {
-                atmosphere = new Atmosphere();
-                atmosphere.setHumidity(rs.getInt("humidity"));
-                atmosphere.setPressure(rs.getDouble("pressure"));
-                atmosphere.setVisibility(rs.getDouble("visibility"));
-                atmosphere.setRising(rs.getDouble("rising"));
+                atmosphere = getAtmosphere(rs);
             }
 
         } catch (SQLException e) {
@@ -45,7 +41,7 @@ public class AtmosphereDao implements DAOInterface<Atmosphere> {
     }
 
     @Override
-    public boolean deleteById(int id) {
+    public boolean deleteById(String id) {
         int aux = 0;
         try (PreparedStatement stmt = connection.prepareStatement(DELETE + id)) {
             aux = stmt.executeUpdate();
@@ -85,11 +81,7 @@ public class AtmosphereDao implements DAOInterface<Atmosphere> {
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
 
-                Atmosphere atmosphere = new Atmosphere();
-                atmosphere.setHumidity(rs.getInt("humidity"));
-                atmosphere.setPressure(rs.getDouble("pressure"));
-                atmosphere.setVisibility(rs.getDouble("visibility"));
-                atmosphere.setRising(rs.getDouble("rising"));
+                Atmosphere atmosphere = getAtmosphere(rs);
 
                 atmosphereList.add(atmosphere);
             }
@@ -99,6 +91,15 @@ public class AtmosphereDao implements DAOInterface<Atmosphere> {
         }
 
         return atmosphereList;
+    }
+
+    private Atmosphere getAtmosphere(ResultSet rs) throws SQLException {
+        Atmosphere atmosphere = new Atmosphere();
+        atmosphere.setHumidity(rs.getInt("humidity"));
+        atmosphere.setPressure(rs.getDouble("pressure"));
+        atmosphere.setVisibility(rs.getDouble("visibility"));
+        atmosphere.setRising(rs.getDouble("rising"));
+        return atmosphere;
     }
 }
 

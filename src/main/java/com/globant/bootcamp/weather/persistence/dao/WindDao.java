@@ -2,7 +2,7 @@ package com.globant.bootcamp.weather.persistence.dao;
 
 
 import com.globant.bootcamp.weather.business.Wind;
-import com.globant.bootcamp.weather.persistence.DataBaseConnection;
+import com.globant.bootcamp.weather.configuration.DataBaseConnection;
 
 import java.sql.*;
 import java.util.LinkedList;
@@ -43,7 +43,7 @@ public class WindDao implements DAOInterface<Wind> {
     }
 
     @Override
-    public boolean deleteById(int id) {
+    public boolean deleteById(String id) {
         int aux = 0;
         try (PreparedStatement stmt = connection.prepareStatement(DELETE + id)) {
             aux = stmt.executeUpdate();
