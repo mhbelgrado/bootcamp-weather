@@ -1,20 +1,18 @@
-package com.globant.bootcamp.weather.control;
+package com.globant.bootcamp.weather;
 
-import com.globant.bootcamp.weather.builder.AtmosphereBuilder;
-import com.globant.bootcamp.weather.business.*;
-import com.globant.bootcamp.weather.persistence.dao.*;
-
-import java.sql.Date;
-import java.time.DayOfWeek;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
  * Created by maxib on 26/09/2016.
  */
+@SpringBootApplication
 public class Main {
 
     public static void main(String[] args) {
+        SpringApplication.run(Main.class, args);
 
-        System.out.println("Initial connection");
+       /* System.out.println("Initial connection");
 
 
         LocationDAO locationDAO = new LocationDAO();
@@ -24,15 +22,15 @@ public class Main {
         location.setRegion("NE");
 
 
-        AtmosphereDao atmosphereDao = new AtmosphereDao();
+        AtmosphereDAO atmosphereDao = new AtmosphereDAO();
 
 
-        WindDao windDao = new WindDao();
+        WindDAO windDao = new WindDAO();
         Wind wind = new Wind();
         wind.setDirection("Norte");
         wind.setSpeed(22.6);
 
-        CurrentDayDao currentDayDao = new CurrentDayDao();
+        CurrentDayDAO currentDayDao = new CurrentDayDAO();
         CurrentDay currentDay = new CurrentDay();
         currentDay.setTemperature(45.3);
         currentDay.setDescription("Dia soleado");
@@ -41,7 +39,7 @@ public class Main {
         AtmosphereBuilder atmosphereBuilder = AtmosphereBuilder.anAtmosphere().withHumidity(22).withRising(22.2).withVisibility(23.2).withAtmosphere_id(3).withPressure(22.7);
 
         ExtendedForecast extendedForecast = new ExtendedForecast();
-        ExtendedForecastDao extendedForecastDao = new ExtendedForecastDao();
+        ExtendedForecastDAO extendedForecastDao = new ExtendedForecastDAO();
 
         extendedForecast.setDate(Date.valueOf("2014-12-22"));
         extendedForecast.setDescription("RAINY");
@@ -49,7 +47,7 @@ public class Main {
         extendedForecast.setMaximumTemp(27);
         extendedForecast.setDay(DayOfWeek.FRIDAY);
 
-        ForecastDao forecastDao = new ForecastDao();
+        ForecastDAO forecastDao = new ForecastDAO();
         Forecast forecast = new Forecast();
 
 
@@ -58,7 +56,7 @@ public class Main {
         //System.out.println(locationDAO.deleteById(1));
         // System.out.println(locationDAO.findAll());
         //System.out.println(forecastDao.findById(2));
-        //System.out.println(forecastDao.deleteById("2016-09-29"));
+        System.out.println(forecastDao.deleteById("2016-09-29"));
         //System.out.println(forecastDao.findAll());
 
 
@@ -69,11 +67,11 @@ public class Main {
         //System.out.println(currentDayDao.insert(currentDay));
 
         //System.out.println(extendedForecastDao.insert(extendedForecast));
-        //System.out.println(extendedForecastDao.findAll());
+        System.out.println(atmosphereDao.findAll());
 
         //System.out.println(extendedForecastDao.findById(2));
-
-
+*/
+        //System.out.println(atmosphereDao.findAll());
     }
 
 

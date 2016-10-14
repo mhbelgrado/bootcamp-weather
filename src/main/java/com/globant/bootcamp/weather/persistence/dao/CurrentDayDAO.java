@@ -2,7 +2,8 @@ package com.globant.bootcamp.weather.persistence.dao;
 
 import com.globant.bootcamp.weather.builder.CurrentDayBuilder;
 import com.globant.bootcamp.weather.business.CurrentDay;
-import com.globant.bootcamp.weather.configuration.DataBaseConnection;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.sql.*;
 import java.util.LinkedList;
@@ -12,8 +13,11 @@ import java.util.List;
 /**
  * Created by maxib on 27/09/2016.
  */
-public class CurrentDayDao implements DAOInterface<CurrentDay> {
-    private Connection connection = DataBaseConnection.getInstance().getConnection();
+@Component
+public class CurrentDayDAO implements DAOInterface<CurrentDay> {
+
+    @Autowired
+    private Connection connection;
 
     private static final String CURRENT_DAY_TABLE_NAME = "current_day";
     private static final String SELECT_BY_ID = "select * from " + CURRENT_DAY_TABLE_NAME + " where date = ";
@@ -89,9 +93,8 @@ public class CurrentDayDao implements DAOInterface<CurrentDay> {
         return currentDayList;
     }
 
-    private CurrentDay getCurrentDay(ResultSet rs) throws SQLException {
-        CurrentDayBuilder currentDayBuilder = CurrentDayBuilder.aCurrentDay().withDate(rs.getDate("date"))
-                .withDescription(rs.getString("description")).withTemperature(rs.getDouble("temperature"));
+    public static CurrentDay getCurrentDay(ResultSet rs) throws SQLException {
+        CurrentDayBuilder currentDayBuilder = CurrentDayBuilder.aCurrentDay().withDate(rs.getDate("date")).withDescription(rs.getString("description")).withTemperature(rs.getDouble("temperature"));
 
         return currentDayBuilder.build();
     }

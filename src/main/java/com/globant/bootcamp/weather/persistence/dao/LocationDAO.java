@@ -1,7 +1,9 @@
 package com.globant.bootcamp.weather.persistence.dao;
 
+import com.globant.bootcamp.weather.builder.LocationBuilder;
 import com.globant.bootcamp.weather.business.Location;
-import com.globant.bootcamp.weather.configuration.DataBaseConnection;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,9 +15,12 @@ import java.util.List;
 /**
  * Created by maxib on 26/09/2016.
  */
+
+@Component
 public class LocationDAO implements DAOInterface<Location> {
 
-    private Connection connection = DataBaseConnection.getInstance().getConnection();
+    @Autowired
+    private Connection connection;
 
     private static final String LOCATION_TABLE_NAME = "location";
     private static final String FIND_BY_ID = "select * from " + LOCATION_TABLE_NAME + " where id_location = ";
@@ -31,10 +36,7 @@ public class LocationDAO implements DAOInterface<Location> {
 
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                location = new Location();
-                location.setCity(rs.getString("city"));
-                location.setCountry(rs.getString("country"));
-                location.setRegion(rs.getString("region"));
+                location = getLocation(rs);
             }
 
         } catch (SQLException e) {
@@ -43,6 +45,7 @@ public class LocationDAO implements DAOInterface<Location> {
 
         return location;
     }
+
 
     @Override
     public boolean deleteById(String id) {
@@ -82,10 +85,7 @@ public class LocationDAO implements DAOInterface<Location> {
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
 
-                Location location = new Location();
-                location.setCity(rs.getString("city"));
-                location.setCountry(rs.getString("country"));
-                location.setRegion(rs.getString("region"));
+                Location location = getLocation(rs);
 
                 locationList.add(location);
             }
@@ -95,6 +95,14 @@ public class LocationDAO implements DAOInterface<Location> {
         }
 
         return locationList;
+    }
+
+    public static Location getLocation(ResultSet rs) throws SQLException {
+
+        LocationBuilder locationBuilder = LocationBuilder.aLocation().withLocationId(rs.getInt("id_location")).withCity(rs.getString("city")).
+                withCountry(rs.getString("country")).withRegion(rs.getString("region"));
+
+        return locationBuilder.build();
     }
 
 }

@@ -2,7 +2,8 @@ package com.globant.bootcamp.weather.persistence.dao;
 
 
 import com.globant.bootcamp.weather.business.ExtendedForecast;
-import com.globant.bootcamp.weather.configuration.DataBaseConnection;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,9 +16,11 @@ import java.util.List;
 /**
  * Created by maxib on 27/09/2016.
  */
-public class ExtendedForecastDao implements DAOInterface<ExtendedForecast> {
+@Component
+public class ExtendedForecastDAO implements DAOInterface<ExtendedForecast> {
 
-    private Connection connection = DataBaseConnection.getInstance().getConnection();
+    @Autowired
+    private Connection connection;
 
     private static final String EXTENDED_FORECAST_TABLE_NAME = "extended_forecast";
     private static final String FIND_BY_ID = "select * from " + EXTENDED_FORECAST_TABLE_NAME + " where date = ";

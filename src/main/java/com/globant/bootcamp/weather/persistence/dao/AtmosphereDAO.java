@@ -1,7 +1,9 @@
 package com.globant.bootcamp.weather.persistence.dao;
 
+import com.globant.bootcamp.weather.builder.AtmosphereBuilder;
 import com.globant.bootcamp.weather.business.Atmosphere;
-import com.globant.bootcamp.weather.configuration.DataBaseConnection;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.sql.*;
 import java.util.LinkedList;
@@ -10,10 +12,11 @@ import java.util.List;
 /**
  * Created by maxib on 27/09/2016.
  */
-public class AtmosphereDao implements DAOInterface<Atmosphere> {
+@Component
+public class AtmosphereDAO implements DAOInterface<Atmosphere> {
 
-
-    private static Connection connection = DataBaseConnection.getInstance().getConnection();
+    @Autowired
+    private static Connection connection;
 
     private static final String ATMOSPHERE_TABLE_NAME = "atmosphere";
     private static final String SELECT_BY_ID = "select * from " + ATMOSPHERE_TABLE_NAME + " where id_atmosphere = ";
@@ -93,13 +96,12 @@ public class AtmosphereDao implements DAOInterface<Atmosphere> {
         return atmosphereList;
     }
 
-    private Atmosphere getAtmosphere(ResultSet rs) throws SQLException {
-        Atmosphere atmosphere = new Atmosphere();
-        atmosphere.setHumidity(rs.getInt("humidity"));
-        atmosphere.setPressure(rs.getDouble("pressure"));
-        atmosphere.setVisibility(rs.getDouble("visibility"));
-        atmosphere.setRising(rs.getDouble("rising"));
-        return atmosphere;
+    public static Atmosphere getAtmosphere(ResultSet rs) throws SQLException {
+
+        AtmosphereBuilder atmosphereBuilder = AtmosphereBuilder.anAtmosphere().withHumidity(rs.getInt("humidity")).withPressure(rs.getDouble("pressure")).
+                withVisibility(rs.getDouble("visibility")).withRising(rs.getDouble("rising"));
+
+        return atmosphereBuilder.build();
     }
 }
 

@@ -1,7 +1,8 @@
 package com.globant.bootcamp.weather.persistence.dao;
 
 import com.globant.bootcamp.weather.business.*;
-import com.globant.bootcamp.weather.configuration.DataBaseConnection;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.sql.*;
 import java.time.DayOfWeek;
@@ -11,23 +12,32 @@ import java.util.List;
 /**
  * Created by maxib on 28/09/2016.
  */
-public class ForecastDao implements DAOInterface<Forecast> {
+@Component
+public class ForecastDAO implements DAOInterface<Forecast> {
 
-    private Connection connection = DataBaseConnection.getInstance().getConnection();
+    @Autowired
+    private Connection connection;
 
     private static final String FORECAST_TABLE_NAME = "forecast";
-    private static final String FIND_BY_ID = "select * from wind w, location l, atmosphere a, current_day c, forecast f\n" +
-            "where f.WIND_ID = w.ID_WIND \n" +
-            "and f.CURRENT_DAY_ID = c.DATE\n" +
-            "and f.ATMOSPHERE_ID = a.ID_ATMOSPHERE\n" +
-            "and f.LOCATION_ID = l.ID_LOCATION\n" +
+    private static final String FIND_BY_ID = "select * from wind w, location l, atmosphere a, current_day c, forecast f " +
+            "where f.WIND_ID = w.ID_WIND " +
+            "and f.CURRENT_DAY_ID = c.DATE " +
+            "and f.ATMOSPHERE_ID = a.ID_ATMOSPHERE " +
+            "and f.LOCATION_ID = l.ID_LOCATION " +
             "and f.ID_FORECAST = ";
+
+    private static final String FIND_BY_DATE = "select * from wind w, location l, atmosphere a, current_day c, forecast f " +
+            "where f.WIND_ID = w.ID_WIND " +
+            "and f.ATMOSPHERE_ID = a.ID_ATMOSPHERE " +
+            "and f.LOCATION_ID = l.ID_LOCATION " +
+            "and c.DATE = ";
+
     private static final String INSERT = "insert into " + FORECAST_TABLE_NAME + " (wind_id, location_id, current_day_id, id_atmosphere_id) values(?, ?, ?, ?)";
     private static final String DELETE = "delete from " + FORECAST_TABLE_NAME + " where id_forecast = ";
-    private static final String FIND_ALL = "select * from wind w, location l, atmosphere a, current_day c, forecast f\n" +
-            "where f.WIND_ID = w.ID_WIND \n" +
-            "and f.CURRENT_DAY_ID = c.DATE\n" +
-            "and f.ATMOSPHERE_ID = a.ID_ATMOSPHERE\n" +
+    private static final String FIND_ALL = "select * from wind w, location l, atmosphere a, current_day c, forecast f " +
+            "where f.WIND_ID = w.ID_WIND " +
+            "and f.CURRENT_DAY_ID = c.DATE " +
+            "and f.ATMOSPHERE_ID = a.ID_ATMOSPHERE " +
             "and f.LOCATION_ID = l.ID_LOCATION";
 
     private static final String EXTEND_FORECAST = "select * from extended_forecast";
@@ -43,25 +53,51 @@ public class ForecastDao implements DAOInterface<Forecast> {
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 forecast = new Forecast();
-                Atmosphere atmosphere = new Atmosphere();
-                atmosphere.setRising(rs.getObject("rising", Double.class));
-                atmosphere.setPressure(rs.getObject("pressure", Double.class));
-                atmosphere.setVisibility(rs.getObject("visibility", Double.class));
-                atmosphere.setHumidity(rs.getObject("humidity", Integer.class));
 
-                Wind wind = new Wind();
-                wind.setDirection(rs.getString("direction"));
-                wind.setSpeed(rs.getObject("speed", Double.class));
+                Atmosphere atmosphere = AtmosphereDAO.getAtmosphere(rs);
 
-                Location location = new Location();
-                location.setCity(rs.getString("city"));
-                location.setRegion(rs.getString("region"));
-                location.setCountry(rs.getString("country"));
+                Wind wind = WindDAO.getWind(rs);
 
-                CurrentDay currentDay = new CurrentDay();
-                currentDay.setDescription(rs.getString("description"));
-                currentDay.setTemperature(rs.getObject("temperature", Double.class));
-                currentDay.setDate(rs.getDate("date"));
+                Location location = LocationDAO.getLocation(rs);
+
+                CurrentDay currentDay = CurrentDayDAO.getCurrentDay(rs);
+
+                forecast.setId(rs.getObject("id_forecast", Integer.class));
+                forecast.setCurrentDay(currentDay);
+                forecast.setAtmosphere(atmosphere);
+                forecast.setWind(wind);
+                forecast.setLocation(location);
+
+                forecast.setExtendedForecast(this.getExtendForecast(forecast.getCurrentDay().getDate()));
+
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return forecast;
+    }
+
+    public Forecast findByDate(Date date) {
+
+        Forecast forecast = null;
+
+        String sql = FIND_BY_DATE + "'" + date + "'";
+        System.out.println(sql);
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                forecast = new Forecast();
+
+                Atmosphere atmosphere = AtmosphereDAO.getAtmosphere(rs);
+
+                Wind wind = WindDAO.getWind(rs);
+
+                Location location = LocationDAO.getLocation(rs);
+
+                CurrentDay currentDay = CurrentDayDAO.getCurrentDay(rs);
 
                 forecast.setId(rs.getObject("id_forecast", Integer.class));
                 forecast.setCurrentDay(currentDay);
@@ -124,25 +160,14 @@ public class ForecastDao implements DAOInterface<Forecast> {
             while (rs.next()) {
 
                 forecast = new Forecast();
-                Atmosphere atmosphere = new Atmosphere();
-                atmosphere.setRising(rs.getObject("rising", Double.class));
-                atmosphere.setPressure(rs.getObject("pressure", Double.class));
-                atmosphere.setVisibility(rs.getObject("visibility", Double.class));
-                atmosphere.setHumidity(rs.getObject("humidity", Integer.class));
 
-                Wind wind = new Wind();
-                wind.setDirection(rs.getString("direction"));
-                wind.setSpeed(rs.getObject("speed", Double.class));
+                Atmosphere atmosphere = AtmosphereDAO.getAtmosphere(rs);
 
-                Location location = new Location();
-                location.setCity(rs.getString("city"));
-                location.setRegion(rs.getString("region"));
-                location.setCountry(rs.getString("country"));
+                Wind wind = WindDAO.getWind(rs);
 
-                CurrentDay currentDay = new CurrentDay();
-                currentDay.setDescription(rs.getString("description"));
-                currentDay.setTemperature(rs.getObject("temperature", Double.class));
-                currentDay.setDate(rs.getDate("date"));
+                Location location = LocationDAO.getLocation(rs);
+
+                CurrentDay currentDay = CurrentDayDAO.getCurrentDay(rs);
 
                 forecast.setCurrentDay(currentDay);
                 forecast.setAtmosphere(atmosphere);
@@ -158,6 +183,7 @@ public class ForecastDao implements DAOInterface<Forecast> {
 
         return forecastList;
     }
+
 
     private List<ExtendedForecast> getExtendForecast(Date beginDate){
 
@@ -186,5 +212,6 @@ public class ForecastDao implements DAOInterface<Forecast> {
 
         return extendedForecastList;
     }
+
 
 }
