@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+       xmlns:jaxrs-client="http://cxf.apache.org/jaxrs-client"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation=" http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+            http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context-3.0.xsd
+            http://cxf.apache.org/jaxrs
+            http://cxf.apache.org/schemas/jaxrs.xsd
+            http://cxf.apache.org/jaxrs-client
+            http://cxf.apache.org/schemas/jaxrs-client.xsd">
+    <import resource="classpath:META-INF/cxf/cxf.xml"/>
+
+    <context:property-placeholder/>
+    <context:annotation-config/>
+    <context:component-scan base-package="com.globant.bootcamp.weather.controller,
+        com.globant.bootcamp.weather.configuration, com.globant.bootcamp.weather.persistence,
+        com.globant.bootcamp.weather.provider, com.globant.bootcamp.weather.services"/>
+
+    <jaxrs:server id="services" address="/">
+        <jaxrs:serviceBeans>
+            <bean class="com.globant.bootcamp.weather.controller.WindController"/>
+            <bean class="com.globant.bootcamp.weather.controller.AtmosphereController"/>
+            <bean class="com.globant.bootcamp.weather.controller.CurrentDayController"/>
+            <bean class="com.globant.bootcamp.weather.controller.ForecastController"/>
+            <bean class="com.globant.bootcamp.weather.controller.LocationController"/>
+        </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider"/>
+        </jaxrs:providers>
+    </jaxrs:server>
+
+    <jaxrs-client:client id="client"
+                         address="https://query.yahooapis.com/v1/public/yql"
+                         serviceClass="com.globant.bootcamp.weather.provider.yahoo.YahooInterface">
+        <jaxrs-client:providers>
+            <bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider">
+                <property name="mapper" ref="jacksonMapper"/>
+            </bean>
+        </jaxrs-client:providers>
+    </jaxrs-client:client>
+    <bean id="jacksonMapper" class="org.codehaus.jackson.map.ObjectMapper"/>
+
+</beans>

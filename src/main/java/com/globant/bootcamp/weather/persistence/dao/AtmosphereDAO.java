@@ -16,7 +16,7 @@ import java.util.List;
 public class AtmosphereDAO implements DAOInterface<Atmosphere> {
 
     @Autowired
-    private static Connection connection;
+    private Connection connection;
 
     private static final String ATMOSPHERE_TABLE_NAME = "atmosphere";
     private static final String SELECT_BY_ID = "select * from " + ATMOSPHERE_TABLE_NAME + " where id_atmosphere = ";

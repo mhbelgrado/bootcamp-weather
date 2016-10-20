@@ -17,10 +17,14 @@ public class DataBaseConnection {
     private Connection connection;
 
     private DataBaseConnection() {
-
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         ResourceBundle resourceBundle = ResourceBundle.getBundle("db");
         String schema = resourceBundle.getString("schema");
-        String url = resourceBundle.getString("url") + "/" + schema + "?useSSL=false";
+        String url = resourceBundle.getString("url") + "/" + schema + "?useSSL=false&serverTimezone=UTC";
         String password = resourceBundle.getString("password");
         String username = resourceBundle.getString("username");
 

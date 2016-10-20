@@ -22,7 +22,7 @@ public class WindDAO implements DAOInterface<Wind> {
 
     private static final String WIND_TABLE_NAME = "wind";
     private static final String SELECT_BY_ID = "select * from " + WIND_TABLE_NAME + " where id_wind = ";
-    private static final String INSERT = "insert into " + WIND_TABLE_NAME + " (id_wind, speed, direction) values(?, ?, ?)";
+    private static final String INSERT = "insert into " + WIND_TABLE_NAME + " (speed, direction) values(?, ?)";
     private static final String DELETE = "delete from " + WIND_TABLE_NAME + " where id_wind = ";
     private static final String FIND_ALL = "select * from " + WIND_TABLE_NAME;
 

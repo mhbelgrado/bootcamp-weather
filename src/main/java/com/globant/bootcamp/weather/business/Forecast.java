@@ -13,6 +13,7 @@ public class Forecast {
     private CurrentDay currentDay;
     private Atmosphere atmosphere;
     private Wind wind;
+    private List<ExtendedForecast> extendedForecast = new LinkedList<>();
 
     public Integer getId() {
         return id;
@@ -22,7 +23,6 @@ public class Forecast {
         this.id = id;
     }
 
-    private List<ExtendedForecast> ExtendedForecast = new LinkedList<>();
 
     public Location getLocation() {
         return location;
@@ -57,11 +57,11 @@ public class Forecast {
     }
 
     public List<com.globant.bootcamp.weather.business.ExtendedForecast> getExtendedForecast() {
-        return ExtendedForecast;
+        return extendedForecast;
     }
 
     public void setExtendedForecast(List<com.globant.bootcamp.weather.business.ExtendedForecast> extendedForecast) {
-        ExtendedForecast = extendedForecast;
+        this.extendedForecast = extendedForecast;
     }
 
     @Override
@@ -71,7 +71,7 @@ public class Forecast {
                 ",\n currentDay=" + currentDay +
                 ",\n atmosphere=" + atmosphere +
                 ",\n wind=" + wind +
-                ",\n ExtendedForecast=" + ExtendedForecast +
+                ",\n extendedForecast=" + extendedForecast +
                 '}';
     }
 }
