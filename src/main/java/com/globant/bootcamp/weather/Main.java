@@ -69,6 +69,7 @@ public class Main {
         //System.out.println(extendedForecastDao.findById(2));
 */
         //System.out.println(atmosphereDao.findAll());
+
     }
 
 

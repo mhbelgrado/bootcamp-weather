@@ -137,6 +137,7 @@ public class ForecastDAO implements DAOInterface<Forecast> {
 
             stmt.setInt(1, forecast.getWind().getWindId());
             stmt.setInt(2, forecast.getLocation().getLocationId());
+            stmt.setDate(3, forecast.getCurrentDay().getDate());
             stmt.setInt(4, forecast.getAtmosphere().getAtmosphere_id());
             aux = stmt.executeUpdate();
 

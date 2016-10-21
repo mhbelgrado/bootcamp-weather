@@ -15,7 +15,7 @@ import java.util.List;
  */
 
 @Component
-@Path("atmosphere")
+@Path("/atmosphere")
 public class AtmosphereController {
 
     @Autowired

@@ -19,4 +19,5 @@ public interface YahooInterface {
     @Produces("application/json")
     ForecastResponse getForecast(@QueryParam(value = "q") String q);
 
+
 }

@@ -14,9 +14,8 @@ import javax.ws.rs.QueryParam;
  * Created by maxib on 11/10/2016.
  */
 @Component
-@Path("forecast")
+@Path("/forecast")
 public class ForecastController {
-
 
     @Autowired
     private ForecastService forecastService;
