@@ -26,7 +26,7 @@ public class BuilderTest {
         assertThat(atmosphere.getHumidity(), is(equalTo(3)));
         assertThat(atmosphere.getRising(), is(equalTo(3.0)));
         assertThat(atmosphere.getVisibility(), is(equalTo(4.3)));
-        assertThat(atmosphere.getAtmosphere_id(), is(equalTo(2)));
+        assertThat(atmosphere.getAtmosphereId(), is(equalTo(2)));
 
     }
 

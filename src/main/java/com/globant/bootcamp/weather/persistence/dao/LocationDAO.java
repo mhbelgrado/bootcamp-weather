@@ -5,10 +5,7 @@ import com.globant.bootcamp.weather.business.Location;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -60,6 +57,21 @@ public class LocationDAO implements DAOInterface<Location> {
         return aux == 1;
     }
 
+    public Integer getLastestLocationID() {
+        Integer locationID = null;
+
+        try (Statement stmt = connection.createStatement();
+             ResultSet rs = stmt.executeQuery("SELECT ID_LOCATION FROM LOCATION order by ID_LOCATION desc LIMIT 1")) {
+            if (rs.next()) {
+                locationID = rs.getInt("ID_LOCATION");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return locationID;
+    }
+
     public boolean insert(Location location) {
         int aux = 0;
         try (PreparedStatement stmt = connection.prepareStatement(INSERT)) {
@@ -74,6 +86,7 @@ public class LocationDAO implements DAOInterface<Location> {
 
         return aux == 1;
     }
+
 
     @Override
     public List<Location> findAll() {

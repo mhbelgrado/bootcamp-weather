@@ -3,14 +3,13 @@ package com.globant.bootcamp.weather.builder;
 import com.globant.bootcamp.weather.business.ExtendedForecast;
 
 import java.sql.Date;
-import java.time.DayOfWeek;
 
 /**
  * Created by maxib on 01/10/2016.
  */
 public final class ExtendedForecastBuilder {
     private Date date;
-    private DayOfWeek day;
+    private String day;
     private Integer maximumTemp;
     private Integer minimumTemp;
     private String description;
@@ -27,7 +26,7 @@ public final class ExtendedForecastBuilder {
         return this;
     }
 
-    public ExtendedForecastBuilder withDay(DayOfWeek day) {
+    public ExtendedForecastBuilder withDay(String day) {
         this.day = day;
         return this;
     }

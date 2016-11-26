@@ -55,7 +55,7 @@ public class ForecastService {
         Location locationResponse = response.getQuery().getResults().getChannel().getLocation();
         Condition currentDayResponse = response.getQuery().getResults().getChannel().getItem().getCondition();
         Channel forecastResponse = response.getQuery().getResults().getChannel();
-        //Item extededForcastResponse = response.getQuery().getResults().getChannel().getItem();
+        List<Forecast> extendedForecastResponse = response.getQuery().getResults().getChannel().getItem().getForecast();
 
 
         com.globant.bootcamp.weather.business.Wind wind = translateToWind(windResponse);
@@ -63,17 +63,24 @@ public class ForecastService {
         com.globant.bootcamp.weather.business.Location location = translateToLocation(locationResponse);
         com.globant.bootcamp.weather.business.CurrentDay currentDay = translateToCurrentDay(currentDayResponse);
         com.globant.bootcamp.weather.business.Forecast forecast = translateToForecast(forecastResponse);
+        List<ExtendedForecast> extendedForecast = translateToExtendedForecastList(extendedForecastResponse);
 
-
-        atmosphereDAO.insert(atmosphere); // inserta perfecto
-        windDAO.insert(wind);             // inserta perfecto
-        locationDAO.insert(location);     // inserta perfecto
-        currentDayDAO.insert(currentDay); // se puede insertar un currentDay por día ya que utilicé como pk a DATE en la
+        //atmosphereDAO.insert(atmosphere); // inserta perfecto
+        //windDAO.insert(wind);             // inserta perfecto
+        //locationDAO.insert(location);     // inserta perfecto
+        //currentDayDAO.insert(currentDay); // se puede insertar un currentDay por día ya que utilicé como pk a DATE en la
         // base de datos y no se acepta duplicados de la pk.
 
         forecastDAO.insert(forecast);    // me devuelve un 200 pero no inserta.
-        // extendedForecastDAO.insert();    // no pude grabar la lista se me complico por el enum de DayOfWeek, lo tendría
+        //extendedForecastDAO.insert(extendedForecast);    // no pude grabar la lista se me complico por el enum de DayOfWeek, lo tendría
         // que haber hecho con String directamente.
+
+        for (ExtendedForecast aux : extendedForecast) {
+
+            extendedForecastDAO.insert(aux);
+
+
+        }
 
         return response;
     }
@@ -128,25 +135,28 @@ public class ForecastService {
 
         for (Forecast aux : forecast) {
             extendedForecastList.add(translateToExtendedForecast(aux));
+
         }
 
         return extendedForecastList;
     }
 
-    // Método que genera una entidad extendedForecast a partir de de una entidad forecast del cliente yahoo con sus atributos
-    // parseados a los de mi tipo. (falto parsear el enum DayOfWeek day)
-    private ExtendedForecast translateToExtendedForecast(Forecast forecastResponse) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm", Locale.ENGLISH);
+
+    private ExtendedForecast translateToExtendedForecast(Forecast extendedForecastResponse) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH);
 
         java.util.Date date = null;
         try {
-            date = simpleDateFormat.parse(forecastResponse.getDate());
+            date = simpleDateFormat.parse(extendedForecastResponse.getDate());
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return ExtendedForecastBuilder.anExtendedForecast().withDescription(forecastResponse.getText()).withDate(new Date(date.getTime()))
-                .withMinimumTemp(Integer.parseInt(forecastResponse.getLow()))
-                .withMaximumTemp(Integer.parseInt(forecastResponse.getHigh())).build();
+        return ExtendedForecastBuilder.anExtendedForecast().withDescription(extendedForecastResponse.getText())
+                .withDate(new Date(date.getTime()))
+                .withDay(extendedForecastResponse.getDay())
+                .withMinimumTemp(Integer.parseInt(extendedForecastResponse.getLow()))
+                .withMaximumTemp(Integer.parseInt(extendedForecastResponse.getHigh()))
+                .withDay(extendedForecastResponse.getDay()).build();
     }
 
 

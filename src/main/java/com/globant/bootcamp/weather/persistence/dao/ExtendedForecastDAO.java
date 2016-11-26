@@ -9,7 +9,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.DayOfWeek;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -39,11 +38,7 @@ public class ExtendedForecastDAO implements DAOInterface<ExtendedForecast> {
                 extendedForecast = new ExtendedForecast();
 
                 extendedForecast.setDate(rs.getDate("date"));
-                try {
-                    extendedForecast.setDay(DayOfWeek.valueOf(rs.getString("day_of_week")));
-                } catch (IllegalArgumentException e) {
-                    System.out.println("Error parsing DayOfWeek. Value " + rs.getString("day_of_week"));
-                }
+                extendedForecast.setDay(rs.getString("day_of_week"));
                 extendedForecast.setMaximumTemp(rs.getObject("maximum_Temp", Integer.class));
                 extendedForecast.setMinimumTemp(rs.getObject("minimum_Temp", Integer.class));
                 extendedForecast.setDescription(rs.getString("description"));
@@ -74,7 +69,7 @@ public class ExtendedForecastDAO implements DAOInterface<ExtendedForecast> {
         int aux = 0;
         try (PreparedStatement stmt = connection.prepareStatement(INSERT)) {
             stmt.setDate(1, extendedForecast.getDate());
-            stmt.setObject(2, extendedForecast.getDay().name());
+            stmt.setString(2, extendedForecast.getDay());
             stmt.setObject(3, extendedForecast.getMaximumTemp());
             stmt.setObject(4, extendedForecast.getMinimumTemp());
             stmt.setString(5, extendedForecast.getDescription());
@@ -99,11 +94,7 @@ public class ExtendedForecastDAO implements DAOInterface<ExtendedForecast> {
 
                 ExtendedForecast extendedForecast = new ExtendedForecast();
                 extendedForecast.setDate(rs.getDate("date"));
-                try {
-                    extendedForecast.setDay(DayOfWeek.valueOf(rs.getString("day_of_week")));
-                } catch (IllegalArgumentException e) {
-                    System.out.println("Error parsing DayOfWeek. Value " + rs.getString("day_of_week"));
-                }
+                extendedForecast.setDay(rs.getString("day_of_week"));
                 extendedForecast.setMaximumTemp(rs.getObject("maximum_Temp", Integer.class));
                 extendedForecast.setMinimumTemp(rs.getObject("minimum_Temp", Integer.class));
                 extendedForecast.setDescription(rs.getString("description"));

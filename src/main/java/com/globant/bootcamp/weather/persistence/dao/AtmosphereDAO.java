@@ -57,6 +57,23 @@ public class AtmosphereDAO implements DAOInterface<Atmosphere> {
 
     }
 
+    public Integer getLastestAtmosphereID() {
+        Integer atmosphereID = null;
+
+        try (Statement stmt = connection.createStatement();
+             ResultSet rs = stmt.executeQuery("SELECT ID_ATMOSPHERE FROM ATMOSPHERE order by ID_ATMOSPHERE desc LIMIT 1")) {
+            if (rs.next()) {
+                atmosphereID = rs.getInt("ID_ATMOSPHERE");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return atmosphereID;
+    }
+
+
+
     public boolean insert(Atmosphere atmosphere) {
         int aux = 0;
         try (PreparedStatement stmt = connection.prepareStatement(INSERT)) {
@@ -73,6 +90,7 @@ public class AtmosphereDAO implements DAOInterface<Atmosphere> {
 
         return aux == 1;
     }
+
 
     @Override
     public List<Atmosphere> findAll() {

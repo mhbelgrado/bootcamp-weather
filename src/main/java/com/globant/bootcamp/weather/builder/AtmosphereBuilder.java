@@ -46,7 +46,7 @@ public final class AtmosphereBuilder {
 
     public Atmosphere build() {
         Atmosphere atmosphere = new Atmosphere();
-        atmosphere.setAtmosphere_id(atmosphere_id);
+        atmosphere.setAtmosphereId(atmosphere_id);
         atmosphere.setHumidity(humidity);
         atmosphere.setPressure(pressure);
         atmosphere.setVisibility(visibility);

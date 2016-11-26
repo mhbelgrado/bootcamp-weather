@@ -22,7 +22,7 @@ public class WindDAO implements DAOInterface<Wind> {
 
     private static final String WIND_TABLE_NAME = "wind";
     private static final String SELECT_BY_ID = "select * from " + WIND_TABLE_NAME + " where id_wind = ";
-    private static final String INSERT = "insert into " + WIND_TABLE_NAME + " (speed, direction) values(?, ?)";
+    private static final String INSERT = "insert into " + WIND_TABLE_NAME + " (speed, direction, id_wind) values(?, ?, ?)";
     private static final String DELETE = "delete from " + WIND_TABLE_NAME + " where id_wind = ";
     private static final String FIND_ALL = "select * from " + WIND_TABLE_NAME;
 
@@ -60,11 +60,29 @@ public class WindDAO implements DAOInterface<Wind> {
         return aux == 1;
     }
 
+    public Integer getLastestWindID() {
+        Integer windID = null;
+
+        try (Statement stmt = connection.createStatement();
+             ResultSet rs = stmt.executeQuery("SELECT ID_WIND FROM WIND order by ID_WIND desc LIMIT 1")) {
+            if (rs.next()) {
+                windID = rs.getInt("ID_WIND");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return windID;
+    }
+
+
+
     public boolean insert(Wind wind) {
         int aux = 0;
         try (PreparedStatement stmt = connection.prepareStatement(INSERT)) {
             stmt.setDouble(1, wind.getSpeed());
             stmt.setString(2, wind.getDirection());
+            stmt.setDouble(3, wind.getWindId());
             aux = stmt.executeUpdate();
 
         } catch (SQLException e) {

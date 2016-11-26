@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.sql.*;
-import java.time.DayOfWeek;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -17,6 +16,18 @@ public class ForecastDAO implements DAOInterface<Forecast> {
 
     @Autowired
     private Connection connection;
+
+    @Autowired
+    private WindDAO windDAO;
+
+    @Autowired
+    private LocationDAO locationDAO;
+
+    @Autowired
+    CurrentDayDAO currentDayDAO;
+
+    @Autowired
+    AtmosphereDAO atmosphereDAO;
 
     private static final String FORECAST_TABLE_NAME = "forecast";
     private static final String FIND_BY_ID = "select * from wind w, location l, atmosphere a, current_day c, forecast f " +
@@ -32,7 +43,7 @@ public class ForecastDAO implements DAOInterface<Forecast> {
             "and f.LOCATION_ID = l.ID_LOCATION " +
             "and c.DATE = ";
 
-    private static final String INSERT = "insert into " + FORECAST_TABLE_NAME + " (wind_id, location_id, current_day_id, id_atmosphere_id) values(?, ?, ?, ?)";
+    private static final String INSERT = "insert into " + FORECAST_TABLE_NAME + " (wind_id, location_id, current_day_id, atmosphere_id) values(?, ?, ?, ?)";
     private static final String DELETE = "delete from " + FORECAST_TABLE_NAME + " where id_forecast = ";
     private static final String FIND_ALL = "select * from wind w, location l, atmosphere a, current_day c, forecast f " +
             "where f.WIND_ID = w.ID_WIND " +
@@ -135,10 +146,25 @@ public class ForecastDAO implements DAOInterface<Forecast> {
         int aux = 0;
         try (PreparedStatement stmt = connection.prepareStatement(INSERT)) {
 
-            stmt.setInt(1, forecast.getWind().getWindId());
-            stmt.setInt(2, forecast.getLocation().getLocationId());
-            stmt.setDate(3, forecast.getCurrentDay().getDate());
-            stmt.setInt(4, forecast.getAtmosphere().getAtmosphere_id());
+            Integer windId = windDAO.getLastestWindID() + 1;
+            Integer locationId = locationDAO.getLastestLocationID() + 1;
+            Date currentDayId = forecast.getCurrentDay().getDate();
+            Integer atmosphereId = atmosphereDAO.getLastestAtmosphereID() + 1;
+
+
+            forecast.getWind().setWindId(windId);
+            forecast.getLocation().setLocationId(locationId);
+            forecast.getAtmosphere().setAtmosphereId(atmosphereId);
+            windDAO.insert(forecast.getWind());
+            locationDAO.insert(forecast.getLocation());
+            currentDayDAO.update(forecast.getCurrentDay());
+            atmosphereDAO.insert(forecast.getAtmosphere());
+
+
+            stmt.setInt(1, windId);
+            stmt.setInt(2, locationId);
+            stmt.setDate(3, currentDayId);                                                          //new Date(new java.util.Date("10/19/2016").getTime()));
+            stmt.setInt(4, atmosphereId);
             aux = stmt.executeUpdate();
 
         } catch (SQLException e) {
@@ -174,6 +200,7 @@ public class ForecastDAO implements DAOInterface<Forecast> {
                 forecast.setAtmosphere(atmosphere);
                 forecast.setWind(wind);
                 forecast.setLocation(location);
+                forecast.setExtendedForecast(this.getExtendForecast(forecast.getCurrentDay().getDate()));
 
                 forecastList.add(forecast);
             }
@@ -199,8 +226,8 @@ public class ForecastDAO implements DAOInterface<Forecast> {
             while (rs.next()) {
 
                 ExtendedForecast extendedForecast = new ExtendedForecast();
-                extendedForecast.setDay(DayOfWeek.valueOf(rs.getString("day_of_week")));
                 extendedForecast.setDate(rs.getDate("date"));
+                extendedForecast.setDay(rs.getString("day_of_week"));
                 extendedForecast.setMaximumTemp(rs.getObject("maximum_temp", Integer.class));
                 extendedForecast.setMinimumTemp(rs.getObject("minimum_temp", Integer.class));
                 extendedForecast.setDescription(rs.getString("description"));

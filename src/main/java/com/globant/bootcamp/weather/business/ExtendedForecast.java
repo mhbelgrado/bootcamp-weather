@@ -1,7 +1,6 @@
 package com.globant.bootcamp.weather.business;
 
 import java.sql.Date;
-import java.time.DayOfWeek;
 
 /**
  * Created by maxib on 26/09/2016.
@@ -9,7 +8,7 @@ import java.time.DayOfWeek;
 public class ExtendedForecast {
 
     private Date date;
-    private DayOfWeek day;
+    private String day;
     private Integer maximumTemp;
     private Integer minimumTemp;
     private String description;
@@ -22,11 +21,11 @@ public class ExtendedForecast {
         this.date = date;
     }
 
-    public DayOfWeek getDay() {
+    public String getDay() {
         return day;
     }
 
-    public void setDay(DayOfWeek day) {
+    public void setDay(String day) {
         this.day = day;
     }
 

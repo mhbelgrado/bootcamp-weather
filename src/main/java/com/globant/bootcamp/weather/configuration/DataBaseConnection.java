@@ -22,6 +22,7 @@ public class DataBaseConnection {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+
         ResourceBundle resourceBundle = ResourceBundle.getBundle("db");
         String schema = resourceBundle.getString("schema");
         String url = resourceBundle.getString("url") + "/" + schema + "?useSSL=false&serverTimezone=UTC";

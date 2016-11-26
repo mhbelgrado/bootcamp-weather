@@ -24,6 +24,8 @@ public class CurrentDayDAO implements DAOInterface<CurrentDay> {
     private static final String INSERT = "insert into " + CURRENT_DAY_TABLE_NAME + " (date, temperature, description) values(?, ?, ?)";
     private static final String DELETE = "delete from " + CURRENT_DAY_TABLE_NAME + " where date = ";
     private static final String FIND_ALL = "select * from " + CURRENT_DAY_TABLE_NAME;
+    private static final String UPDATE = " UPDATE from" + CURRENT_DAY_TABLE_NAME + "SET date = ?," + "temperature = ?," + "description = ?,)";
+
 
     public CurrentDay findById(int id) {
 
@@ -56,9 +58,26 @@ public class CurrentDayDAO implements DAOInterface<CurrentDay> {
         return aux == 1;
     }
 
+
     public boolean insert(CurrentDay currentDay) {
         int aux = 0;
         try (PreparedStatement stmt = connection.prepareStatement(INSERT)) {
+
+            stmt.setDate(1, currentDay.getDate());
+            stmt.setDouble(2, currentDay.getTemperature());
+            stmt.setString(3, currentDay.getDescription());
+            aux = stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return aux == 1;
+    }
+
+    public boolean update(CurrentDay currentDay) {
+        int aux = 0;
+        try (PreparedStatement stmt = connection.prepareStatement(UPDATE)) {
 
             stmt.setDate(1, currentDay.getDate());
             stmt.setDouble(2, currentDay.getTemperature());
